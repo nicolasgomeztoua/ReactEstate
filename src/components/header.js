@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "gatsby";
 import styled, { css, keyframes } from "styled-components";
@@ -92,14 +92,12 @@ const NavBtn = styled.div`
 `;
 
 const Header = ({ siteTitle, toggle, isOpen }) => {
-  const [scrolled, setScrolled] = useState(window.scrollY);
-  const onscroll = () => {
-    setScrolled(window.scrollY);
-    console.log(window.scrollY);
-  };
-  window.onscroll = function () {
-    onscroll();
-  };
+  const [scrolled, setScrolled] = useState(0);
+  useEffect(() => {
+    window.onscroll = () => {
+      setScrolled(window.pageYOffset);
+    };
+  }, []);
 
   return (
     <Nav scrolled={scrolled}>
