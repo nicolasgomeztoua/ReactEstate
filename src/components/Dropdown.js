@@ -1,10 +1,22 @@
 import { Link } from "gatsby";
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Button } from "./Button";
 import { FaTimes } from "react-icons/fa";
 import { menuData } from "../data/MenuData";
+const fade_in_show = keyframes`{
+     0% {
+       display:none;
+          opacity: 0;
+         transform: translateX(-100%)
+     }
 
+     100% {
+       display: flex;
+          opacity: 1;
+          transform: translateX(0%)
+     }
+}`;
 const DropdownContainer = styled.div`
   position: fixed;
   z-index: 999;
@@ -16,20 +28,24 @@ const DropdownContainer = styled.div`
   top: 0;
   left: 0;
   transition: 0.3s ease-in-out;
-  opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
+  display: ${({ isOpen }) => (isOpen ? "grid" : "none")};
+  animation: ${fade_in_show} 0.5s ease-in forwards;
   top: ${({ isOpen }) => (isOpen ? "0" : "-100")};
 `;
 const Icon = styled.div`
   position: absolute;
-  top: 1.2rem;
-  right: 1.5rem;
+  bottom: 90%;
+  left: 90%;
   background: transparent;
   font-size: 2rem;
   cursor: pointer;
   outline: none;
+  z-index: 1;
+  cursor: pointer;
 `;
 const CloseIcon = styled(FaTimes)`
   color: #000d1a;
+  cursor: pointer;
 `;
 const DropsdownWrapper = styled.div``;
 const DropdownMenu = styled.div`
@@ -66,11 +82,14 @@ const BtnWrap = styled.div`
 const Dropdown = ({ toggle, isOpen }) => {
   return (
     <DropdownContainer isOpen={isOpen} onClick={toggle}>
+      {" "}
       <Icon onClick={toggle}>
-        <CloseIcon />
+        <CloseIcon onClick={toggle} />
       </Icon>
       <DropsdownWrapper>
+        {" "}
         <DropdownMenu>
+          {" "}
           {menuData.map((item, index) => {
             return (
               <DropdownLink to={item.link} key={index}>
@@ -80,7 +99,9 @@ const Dropdown = ({ toggle, isOpen }) => {
           })}
         </DropdownMenu>
         <BtnWrap>
-          <Button primary={true} round={true} big={true} to="contact" />
+          <Button primary={true} round={true} big={true} to="contact">
+            Contact Us
+          </Button>
         </BtnWrap>
       </DropsdownWrapper>
     </DropdownContainer>

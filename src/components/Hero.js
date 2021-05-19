@@ -1,11 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { SliderData } from "../data/SliderData";
 import { Button } from "./Button";
 import { IoMdArrowRoundForward } from "react-icons/io";
 import { IoArrowForward, IoArrowBack } from "react-icons/io5";
+const imageSoft = keyframes` {
+  0% {
+    opacity:0;
+  }
 
+  100% {
+     opacity:1;
+  }
+}`;
 const HeroSection = styled.section`
   height: 100vh;
   max-height: 1100px;
@@ -62,6 +70,7 @@ const HeroImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  animation: ${imageSoft} 1s ease-out;
 `;
 const HeroContent = styled.div`
   position: relative;
@@ -93,6 +102,7 @@ const SliderButtons = styled.div`
   right: 50px;
   display: flex;
   z-index: 10;
+  overflow-y: hidden;
 `;
 const arrowButtons = css`
   width: 50px;
@@ -140,7 +150,7 @@ const Hero = () => {
     const nextSlide = () => {
       setImage((image) => (image === length - 1 ? 0 : image + 1));
     };
-    timeout.current = setTimeout(nextSlide, 3000);
+    timeout.current = setTimeout(nextSlide, 5000);
 
     return function () {
       if (timeout.current) {
@@ -163,10 +173,10 @@ const Hero = () => {
                   <HeroImage src={slide.image} alt={slide.alt} />
                   <HeroContent>
                     <h2>{slide.title}</h2>
-                    <p>{slide.price}</p>
+                    <p>{slide.price}$</p>
                     <Button
                       primary={true}
-                      to={slide.path}
+                      to={`/homes/${slide.to}`}
                       css={`
                         max-width: "160px";
                       `}

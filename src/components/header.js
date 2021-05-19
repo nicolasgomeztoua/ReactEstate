@@ -1,19 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "gatsby";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { menuData } from "../data/MenuData";
 import { Button } from "./Button";
 import { FaBars } from "react-icons/fa";
+const onScrollDown = keyframes`{
+     0% {
+        
+         background:transparent;
+     }
+
+     100% {
+         background:#cd863f;
+          
+         
+     }
+}`;
+const onScrollUp = keyframes`{
+     0% {
+         background:#cd863f;
+         
+     }
+
+     100% {
+        
+          background:transparent;
+         
+     }
+}`;
 const Nav = styled.nav`
   height: 60px;
 
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
-  z-index: 1000;
+  z-index: 999;
   position: fixed;
-
+  background: ${({ scrolled }) => (scrolled > 0 ? "#cd863f" : "tansparent")};
+  animation: ${({ scrolled }) => (scrolled > 0 ? onScrollDown : onScrollUp)} 1s;
   width: 100%;
 `;
 const NavLink = css`
@@ -33,7 +58,7 @@ const MenuBars = styled(FaBars)`
   display: none;
 
   @media screen and (max-width: 768px) {
-    display: block;
+    display: ${({ isOpen }) => (isOpen ? "none" : "block")};
     height: 25px;
     width: 25px;
     cursor: pointer;
@@ -67,12 +92,19 @@ const NavBtn = styled.div`
 `;
 
 const Header = ({ siteTitle, toggle, isOpen }) => {
-  const [displayBars, setDisplayBars] = useState("");
+  const [scrolled, setScrolled] = useState(window.scrollY);
+  const onscroll = () => {
+    setScrolled(window.scrollY);
+    console.log(window.scrollY);
+  };
+  window.onscroll = function () {
+    onscroll();
+  };
 
   return (
-    <Nav>
-      <Logo>{siteTitle}</Logo>
-      <MenuBars onClick={toggle} />
+    <Nav scrolled={scrolled}>
+      <Logo to="/">{siteTitle}</Logo>
+      <MenuBars isOpen={isOpen} onClick={toggle} />
       <NavMenu>
         {menuData.map((page, index) => {
           return <NavMenuLinks to={page.link}>{page.title}</NavMenuLinks>;

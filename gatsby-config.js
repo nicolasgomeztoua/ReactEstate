@@ -1,3 +1,5 @@
+const dotenv = require("dotenv").config();
+
 module.exports = {
   siteMetadata: {
     title: `React Real Estate`,
@@ -6,11 +8,19 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: "gatsby-source-contentful",
+      options: {
+        spaceId: process.env.SPACE_ID,
+        accessToken: process.env.ACCESS_TOKEN,
+      },
+    },
+    {
       resolve: `gatsby-plugin-styled-components`,
       options: {
         // Add any options here
       },
     },
+    `gatsby-plugin-sass`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
     {
